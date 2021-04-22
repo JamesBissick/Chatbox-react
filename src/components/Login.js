@@ -20,7 +20,7 @@ class Login extends Component {
 
   render() {
     if (this.state.goToChat) {
-      return <Redirect to={`/Users/${this.state.username}`} />
+      return <Redirect push to={`/Users/${this.state.username}`} />
     }
 
     return (
