@@ -1,10 +1,17 @@
 import React, { Component, createRef } from 'react';
 
-import Form from "./components/Form.js";
-import Message from "./components/Message.js";
-import base from "./base.js";
+import Form from './components/Form.js';
+import Message from './components/Message.js';
+import base from './base.js';
 
 import './App.css';
+import './animations.css';
+
+// Animations
+import {
+  CSSTransition,
+  TransitionGroup
+} from 'react-transition-group';
 
 class App extends Component {
   state = {
@@ -36,16 +43,20 @@ class App extends Component {
     this.setState({ messages });
   }
 
+  isUser = (username) => username === this.state.username;
+
   render() {
     const messages = Object.keys(this.state.messages).map(key => (
-        <Message key={ key } username={ this.state.messages[key].username } message={ this.state.messages[key].message } />
+      <CSSTransition key={ key } classNames='fade' timeout={ 250 }>
+        <Message isUser={this.isUser} username={ this.state.messages[key].username } message={ this.state.messages[key].message } />
+      </CSSTransition>
     ));
 
     return (
       <div className='box'>
         <div>
           <div className="messages" ref={ this.messagesRef }>
-            <div className="message">{ messages }</div>
+            <TransitionGroup className="message">{ messages }</TransitionGroup>
           </div>
         </div>
         <Form username={this.state.username} addMessage={ this.addMessage } length={140} />
