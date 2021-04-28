@@ -29,6 +29,10 @@ class App extends Component {
   addMessage = message => {
     const messages = { ...this.state.messages };
     messages[`message-${Date.now()}`] = message;
+    /* Removes messages older than the 10 newest ones */
+    Object.keys(messages).slice(0, -10).forEach(key => {
+      messages[key] = null;
+    });
     this.setState({ messages });
   }
 
