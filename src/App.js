@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 
 import Form from "./components/Form.js";
 import Message from "./components/Message.js";
@@ -12,11 +12,18 @@ class App extends Component {
     username: this.props.match.params.user
   }
 
+  messagesRef = createRef();
+
   componentDidMount() {
     base.syncState('/', {
       context: this,
       state: 'messages'
     });
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const ref = this.messagesRef.current;
+    ref.scrollTop = ref.scrollHeight;
   }
 
   addMessage = message => {
@@ -28,13 +35,12 @@ class App extends Component {
   render() {
     const messages = Object.keys(this.state.messages).map(key => (
         <Message key={ key } username={ this.state.messages[key].username } message={ this.state.messages[key].message } />
-    ))
-
+    ));
 
     return (
       <div className='box'>
         <div>
-          <div className="messages">
+          <div className="messages" ref={ this.messagesRef }>
             <div className="message">{ messages }</div>
           </div>
         </div>
